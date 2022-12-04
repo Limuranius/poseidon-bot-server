@@ -1,0 +1,13 @@
+table {
+	border: black solid 2px;
+	border-spacing: 0;
+}
+
+table th, table td {
+	border: black solid 1px;
+	padding: 4px;
+}
+
+table tr:hover {
+	background-color: paleturquoise;
+}

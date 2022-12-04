@@ -1,0 +1,28 @@
+body {
+	background-color: #1B4F72;
+}
+
+header {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	gap: 5px;
+}
+
+header .header-item {
+	display: inline-block;
+	text-decoration: none;
+	padding: 5px;
+	background-color: navy;
+	color: white;
+}
+
+header .header-item:hover {
+	background-color: blueviolet;
+}
+
+div.content {
+	width: 60%;
+	background-color: #2874A6;
+	margin: auto;
+}

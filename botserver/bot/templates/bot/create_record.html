@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+	Create
+{% endblock %}
+
+
+{% block links %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/create.css' %}">
+{% endblock %}
+
+
+{% block content %}
+	<h1>ААааааААААааааа</h1>
+	<form action="{% url 'create_record_url' %}" method="post">
+		{% csrf_token %}
+		<div class="forms-container">
+			{{ form }}
+		</div>
+		<input type="submit">
+	</form>
+{% endblock %}
+
+

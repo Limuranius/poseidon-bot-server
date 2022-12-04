@@ -1,0 +1,6 @@
+.forms-container {
+	display: grid;
+	grid-template-columns: max-content max-content;
+	grid-gap: 5px;
+}
+
