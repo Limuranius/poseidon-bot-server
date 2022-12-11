@@ -9,6 +9,7 @@ from .Logger import LoggerInterface
 from typing import Dict
 from threading import Thread
 from enum import Enum
+import traceback
 
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36"
 
@@ -20,10 +21,10 @@ POSEIDON_POST_EVENTS_URL = "https://poseidon.dvfu.ru/includes/check-events.php"
 
 
 class BotStatus(Enum):
-    NOT_STARTED = 1     # Метод run() ещё не был запущен
-    RUNNING = 2         # Метод run() был запущен и бот работает
-    FINISHED = 3        # Бот закончил выполнение метода run()
-    ERRORS_OCCURRED = 4 # При выполнении работы произошли ошибки
+    NOT_STARTED = 1  # Метод run() ещё не был запущен
+    RUNNING = 2  # Метод run() был запущен и бот работает
+    FINISHED = 3  # Бот закончил выполнение метода run()
+    ERRORS_OCCURRED = 4  # При выполнении работы произошли ошибки
 
 
 class Bot:
@@ -97,7 +98,7 @@ class Bot:
         else:
             raise Exception("Could not log into Poseidon")
 
-    def __getScheduleStr(self) -> str:
+    def __getScheduleStr(self) -> str:  # TODO: сделать, чтобы принимал на вход определённую дату
         """
         Запрашивает расписание с сайта.
         Возвращает ответ в виде строки.
@@ -110,7 +111,7 @@ class Bot:
                                      })
         return response.text
 
-    def __getScheduleJSON(self) -> dict:
+    def __getScheduleJSON(self) -> dict:  # TODO: сделать, чтобы принимал на вход определённую дату
         """Запрашивает расписание с сайта и возвращает ответ в виде объекта JSON"""
         return json.loads(self.__getScheduleStr())
 
@@ -163,15 +164,17 @@ class Bot:
     def __waitUntil(self, exec_time: datetime.datetime) -> None:
         """Останавливает работу программы, пока часы не стукнут exec_time"""
         self._logger.log(f"Waiting until: {exec_time}")
-        while datetime.datetime.today() < exec_time:
+        while datetime.datetime.now(exec_time.tzinfo) < exec_time:
             time.sleep(1)
         self._logger.log(f"Pizza time!")
 
     def run(self) -> None:
+        self._logger.log("Bot started running.")
         self.status = BotStatus.RUNNING
 
-        # Останавливаем программу, пока не наступит дата и время записи
-        t = datetime.datetime.combine(self._config_manager.Date, self._config_manager.ExecuteAt)
+        # Останавливаем программу, пока не наступит дата и время открытия записи
+        t = self._config_manager.ExecuteAt - datetime.timedelta(
+            seconds=20)  # Вычитаем 20 секунд, чтобы бот ещё успел залогиниться
         self.__waitUntil(t)
 
         # Логинимся на сайтах
@@ -201,7 +204,7 @@ class Bot:
             self.run()
         except Exception as e:
             self.status = BotStatus.ERRORS_OCCURRED
-            self._logger.log(str(e))
+            self._logger.log(traceback.format_exc())
 
     def run_in_background(self):
         t = Thread(target=self.run_log_exceptions, daemon=True)
@@ -210,6 +213,23 @@ class Bot:
     def update_config(self):
         """Обновляет данные конфига"""
         self._config_manager.load()
+
+    def get_user_info(self) -> dict:
+        """Получает различную информацию о пользователе, используя парсинг страниц ДВФУ"""
+        pass  # TODO
+
+    def can_auth(self) -> bool:
+        """Проверяет правильность логина и пароля.
+        Пытается авторизоваться и возвращает True, если авторизоваться удалось"""
+        pass  # TODO
+
+    def __get_dormitory_machines(self) -> list[int]:
+        """Получает номера машинок в корпусе"""
+        pass  # TODO
+
+    def __get_day_open_time(self) -> list[datetime.time]:
+        """Возвращает дни и время, когда открываются записи"""
+        pass  # TODO
 
 
 def _get_metas(response_text: str) -> Dict[str, str]:

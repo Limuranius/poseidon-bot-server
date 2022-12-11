@@ -7,8 +7,8 @@ from dataclasses import dataclass
 
 @dataclass
 class Config:
-    # Время, в которое нужно запустить бота
-    ExecuteAt: datetime.time = None
+    # Время и дата, в которое нужно запустить бота
+    ExecuteAt: datetime.datetime = None
 
     # Дата, на которую бот будет записываться
     Date: datetime.date = None
@@ -35,7 +35,7 @@ class Config:
 @dataclass
 class UserData:
     username: str = None
-    password: str = None
+    password: str | bytes = None  # Может быть либо пароль в виде строки, либо пароль в виде зашифрованных байтов
 
 
 class ConfigJSONEncoder(json.JSONEncoder):
@@ -59,7 +59,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
                 "password": o.password
             }
 
-    def timedelta_to_str(self, td: datetime.timedelta):
+    def timedelta_to_str(self, td: datetime.timedelta) -> str:
         """Приводит datetime.timedelta к виду HH:MM"""
         seconds = td.total_seconds()
         hours = round(seconds / 3600)
