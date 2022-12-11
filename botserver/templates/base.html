@@ -12,6 +12,8 @@
         <a href="{% url 'index_url' %}" class="header-item logo">На главную</a>
         <a href="{% url 'records_list_url' %}" class="header-item">Список записей</a>
         <a href="{% url 'create_record_url' %}" class="header-item">Создать запись</a>
+        <a href="{% url 'login_url' %}" class="header-item">User: {{user}}</a>
+        <a href="{% url 'register_url' %}" class="header-item">Регистрация</a>
     </header>
 
     <div class="content">

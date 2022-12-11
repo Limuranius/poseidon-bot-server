@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-too7569xpwl_8mh_8zg_y66oxutm@7b7qra77h5oe7#xbx_jq4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*", "https://esa.dvfu.ru/"]
+
+CSRF_TRUSTED_ORIGINS = ["https://*.eu.ngrok.io/"]
 
 
 # Application definition
@@ -38,8 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bot'
+    'bot',
+    'users',
 ]
+
+AUTH_USER_MODEL = "users.CustomUser"  # Переключает пользователя с дефолтного на кастомный
+LOGIN_URL = "login_url"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
