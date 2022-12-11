@@ -19,14 +19,7 @@ class BotMonitor:
         """Создаёт ботов для каждого запроса в базе данных"""
         objects = RecordModel.objects.all()
         for obj in objects:
-            bot_id = obj.id
-            bot = Bot(
-                ConfigManagerDB(RecordModel, bot_id),
-                # DatabaseLogger(RecordModel, bot_id)
-                ConsoleLogger()
-            )
-            cls.bots[bot_id] = bot
-            bot.run_in_background()
+            cls.update_bot_for_obj(obj)
 
     @classmethod
     def update_bot_for_obj(cls, obj: RecordModel):
@@ -36,9 +29,8 @@ class BotMonitor:
             cls.bots[obj.id].update_config()
         else:  # Если привязанного бота нет
             bot = Bot(
-                ConfigManagerDB(RecordModel, obj.id),
-                # DatabaseLogger(RecordModel, bot_id)
-                ConsoleLogger()
+                ConfigManagerDB(obj),
+                DatabaseLogger(obj)
             )
             cls.bots[obj.id] = bot
             bot.run_in_background()
