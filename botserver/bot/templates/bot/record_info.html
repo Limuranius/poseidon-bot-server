@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+	Просмотр записи
+{% endblock %}
+
+{% block links %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/record.css' %}">
+{% endblock %}
+
+
+{% block content %}
+	<p>Дата включения бота: {{ record.open_datetime|date:"d.m.Y H:i" }}</p>
+	<p>Дата записи: {{ record.date|date:"d.m.Y" }}</p>
+	<p>Минимальная длительность: {{ record.min_duration|date:"H:i" }}</p>
+	<p>Максимальная длительность: {{ record.max_duration|date:"H:i" }}</p>
+	<p>Номер машинки: {{ record.machine_number }}</p>
+	<p>От: {{ record.time_from|date:"H:i" }}</p>
+	<p>До: {{ record.time_before|date:"H:i" }}</p>
+	<p>Имя: {{ record.user_name }}</p>
+	<p>Лог:</p>
+	<textarea readonly>{{ record.log }}</textarea>
+{% endblock %}
+
+
