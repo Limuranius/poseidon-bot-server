@@ -170,6 +170,10 @@ class Bot:
 
     def run(self) -> None:
         self._logger.log("Bot started running.")
+        if not self.can_auth():
+            raise Exception("Incorrect FEFU credentials")
+        else:
+            self._logger.log("Correct FEFU credentials")
         self.status = BotStatus.RUNNING
 
         # Останавливаем программу, пока не наступит дата и время открытия записи
@@ -205,6 +209,7 @@ class Bot:
         except Exception as e:
             self.status = BotStatus.ERRORS_OCCURRED
             self._logger.log(traceback.format_exc())
+            self._logger.log("Bot finished with exceptions.")
 
     def run_in_background(self):
         t = Thread(target=self.run_log_exceptions, daemon=True)
